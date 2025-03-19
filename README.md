@@ -11,7 +11,7 @@
     ```
 - #### Локально у себя откройте новую ветку(branch)
     ```
-    git branch -c 'your-unique-branch-name'
+    git checkout -b 'your-unique-branch-name'
     ```
 - #### Когда захотите сделать изменения используйте:
 
