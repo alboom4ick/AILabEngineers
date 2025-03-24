@@ -3,10 +3,8 @@ services:
     image: postgres:16
     container_name: postgres_db
     restart: always
-    environment:
-      POSTGRES_DB: "postgres_beket"
-      POSTGRES_USER: "beket"
-      POSTGRES_PASSWORD: "beket"
+    env_file:
+      - .env-non-dev
     ports:
       - "5433:5432"  # Проброс порта
     volumes:
