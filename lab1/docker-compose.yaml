@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: "postgres_beket"
+      POSTGRES_USER: "beket"
+      POSTGRES_PASSWORD: "beket"
+    ports:
+      - "5433:5432"  # Проброс порта
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data  # Хранилище данных на хосте
+      - ./scripts:/docker-entrypoint-initdb.d  # Это монтирует папку scripts
+    networks:
+      - app-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    env_file:
+      - .env-non-dev
+    ports:
+      - "5080:80"
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  minio:
+    image: minio/minio
+    container_name: minio_storage
+    command: server --console-address ":9001" /data
+    env_file:
+      - .env-non-dev
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./s3data:/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
